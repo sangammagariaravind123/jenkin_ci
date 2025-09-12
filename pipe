@@ -7,7 +7,7 @@ pipeline {
         bat """
         if exist out rmdir /s /q out
         mkdir out
-        javac src/*.java -d out
+        javac -source 1.8 -target 1.8 src/*.java -d out
         """
       }
     }
