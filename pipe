@@ -14,7 +14,7 @@ pipeline {
     stage('Run') {
       steps {
         bat """
-        java -cp out hello.Hello
+        java src.Hey
         echo Build_OK > artifact.txt
         """
       }
