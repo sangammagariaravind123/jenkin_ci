@@ -38,6 +38,7 @@ pipeline {
     }
   }
   post {
+    agent { label 'built-in' }
     always {
       archiveArtifacts artifacts: 'artifact.txt, out/**', allowEmptyArchive: false
     }
