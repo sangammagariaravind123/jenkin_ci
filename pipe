@@ -9,6 +9,7 @@ pipeline {
       }
     }
     stage('Build on Windows agent') {
+      agent { label 'win' }
       steps {
         bat """
         if exist out rmdir /s /q out
