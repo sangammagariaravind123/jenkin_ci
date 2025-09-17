@@ -1,28 +1,44 @@
 pipeline {
-  agent any
+  agent none
   stages {
-    stage('Checkout') { steps { checkout scm } }
-    stage('Build') {
+    stage('Where am I (Controller)'){
+      agent { label 'built-in' }
+      steps {
+        echo "NODE = ${env.NODE_NAME}"
+        echo "WORKSPACE = ${env.WORKSPACE}"
+      }
+    }
+    stage('Build on Windows agent') {
       steps {
         bat """
         if exist out rmdir /s /q out
         mkdir out
         javac -source 1.8 -target 1.8 src/*.java -d out
-        """
-      }
-    }
-    stage('Run') {
-      steps {
-        bat """
         java -cp out src.Hey
         echo Build_OK > artifact.txt
         """
       }
     }
+    stage('Parallel: Controller vs Agent') {
+      parallel {
+        stage('Controller lane') {
+          agent { label 'built-in' }
+          steps {
+            echo "PARALLEL NODE = ${env.NODE_NAME}"
+          }
+        }
+        stage('Agent lane') {
+          agent { label 'win' }
+          steps {
+            bat "echo PARALLEL NODE = %NODE_NAME%"
+          }
+        }
+      }
+    }
   }
   post {
     always {
-      archiveArtifacts artifacts: 'artifact.txt, out/**'
+      archiveArtifacts artifacts: 'artifact.txt, out/**', allowEmptyArchive: false
     }
   }
 }
