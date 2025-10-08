@@ -3,7 +3,7 @@ package src;
 public class Hey {
     public static void main(String[] args) {
         System.out.println("Hello, world!");
-        System.out.println("well, wassup");
+        System.out.println("execution complete");
     }
 }
 // dummy change
